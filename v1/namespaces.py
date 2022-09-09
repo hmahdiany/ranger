@@ -72,7 +72,7 @@ def create_namespace_yaml_file(all_namespaces, result_dir):
 if __name__ == "__main__":
 
     # define result directory
-    RESULTS_DIR = results
+    RESULTS_DIR = "results"
 
     all_ns = get_user_namespaces()
     create_namespace_yaml_file(all_ns, RESULTS_DIR)
