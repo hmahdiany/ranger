@@ -19,7 +19,7 @@ def get_user_namespaces():
     # command line to get all namespaces with ai prefix
     get_ns = "kubectl get ns | grep  -v '^kube' | grep -v 'NAME' | awk '{print $1}'"
 
-    # execute get_ns command to capture user namespaces
+    # execute get_ns command to capture user's namespaces
     cmd = subprocess.Popen(get_ns, stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
     output, error = cmd.communicate()
 
@@ -53,7 +53,7 @@ def create_namespace_yaml_file(all_namespaces, result_dir):
             print('creating', ns, 'directory')
             os.mkdir(BASE_DIR/RESULTS_DIR/ns)
 
-        # execute command line to get user namespaces in json format
+        # execute command line to get user's namespaces in json format
         # and convert it to yaml format
         cmd = "kubectl get ns -o json " + ns
         all_ns = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)

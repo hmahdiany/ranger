@@ -13,7 +13,7 @@ def main():
         print('creating', RESULTS_DIR, 'directory')
         os.mkdir(BASE_DIR/RESULTS_DIR)
 
-    # use namespaces package to get all user namespaces 
+    # use namespaces package to get all user's namespaces 
     # and create yaml file for them
     all_ns = v1.namespaces.get_user_namespaces()
     v1.namespaces.create_namespace_yaml_file(all_ns, RESULTS_DIR)
