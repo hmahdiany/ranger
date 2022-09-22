@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from v1 import namespaces
 from v1 import configmaps
+from v1 import secrets
 
 def main():
     # set base directory and create results directory
@@ -20,10 +21,15 @@ def main():
     all_ns = namespaces.get_user_namespaces()
     namespaces.create_namespace_yaml_file(all_ns, RESULTS_DIR)
 
-    # Use configmaps package to get all configmaps in all namespaces
+    # use configmaps package to dump all configmaps in all namespaces
     # save them in results/<namespace name>/configmaps
     print("exporting configmaps in all namespaces")
     configmaps.get_configmaps(all_ns, RESULTS_DIR)
+
+    # use secrets package to dump all secrets in all namespaces
+    # save them in results/<namespace name>/secrets
+    print("exporting secrets in all namespaces")
+    secrets.get_secrets(all_ns, RESULTS_DIR)
 
 
 if __name__ == "__main__":
