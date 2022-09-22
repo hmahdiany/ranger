@@ -8,7 +8,7 @@ from yaml.loader import SafeLoader
 
 def get_user_namespaces():
     """
-    this function create a list of all namesapces
+    this function creates a list of all namesapces
     in a kubernetes cluster except those that start
     with kube prefix
     """

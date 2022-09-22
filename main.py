@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
-import v1
+from v1 import namespaces
+from v1 import configmaps
 
 def main():
     # set base directory and create results directory
@@ -15,8 +16,15 @@ def main():
 
     # use namespaces package to get all user's namespaces 
     # and create yaml file for them
-    all_ns = v1.namespaces.get_user_namespaces()
-    v1.namespaces.create_namespace_yaml_file(all_ns, RESULTS_DIR)
+    print("exporting all user's namespaces")
+    all_ns = namespaces.get_user_namespaces()
+    namespaces.create_namespace_yaml_file(all_ns, RESULTS_DIR)
+
+    # Use configmaps package to get all configmaps in all namespaces
+    # save them in results/<namespace name>/configmaps
+    print("exporting configmaps in all namespaces")
+    configmaps.get_configmaps(all_ns, RESULTS_DIR)
+
 
 if __name__ == "__main__":
     main()
