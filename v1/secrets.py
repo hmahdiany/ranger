@@ -15,17 +15,17 @@ def get_secrets(all_namespaces, result_dir):
     # set base directory and create namespaces directory
     BASE_DIR = Path(__file__).resolve().parent.parent
     RESULTS_DIR = result_dir
-    CM_DIR = "secrets"
+    SECRETS_DIR = "secrets"
     
     for ns in all_namespaces:
 
         # create a directory named secrets to store all confimaps
         # in a namespace
-        if os.path.exists(BASE_DIR/RESULTS_DIR/ns/CM_DIR):
-            print(CM_DIR, 'directory already exists')
+        if os.path.exists(BASE_DIR/RESULTS_DIR/ns/SECRETS_DIR):
+            print(SECRETS_DIR, 'directory already exists')
         else:
             print('creating', ns, 'directory')
-            os.mkdir(BASE_DIR/RESULTS_DIR/ns/CM_DIR)
+            os.mkdir(BASE_DIR/RESULTS_DIR/ns/SECRETS_DIR)
 
         # create an empty list to list all secrets in a namespace
         all_secrets = []
@@ -58,7 +58,7 @@ def get_secrets(all_namespaces, result_dir):
                 del json_obj['metadata']['resourceVersion']
                 del json_obj['metadata']['creationTimestamp']
                 del json_obj['metadata']['uid']
-                with open(os.path.join(BASE_DIR/RESULTS_DIR/ns/CM_DIR, secret_name), 'w') as f:
+                with open(os.path.join(BASE_DIR/RESULTS_DIR/ns/SECRETS_DIR, secret_name), 'w') as f:
                     yaml.dump(json_obj, f)
             except:
                 print(error)
