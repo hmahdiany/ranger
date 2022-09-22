@@ -3,6 +3,7 @@ from pathlib import Path
 from v1 import namespaces
 from v1 import configmaps
 from v1 import secrets
+from apps_v1 import deployments
 
 def main():
     # set base directory and create results directory
@@ -30,6 +31,11 @@ def main():
     # save them in results/<namespace name>/secrets
     print("exporting secrets in all namespaces")
     secrets.get_secrets(all_ns, RESULTS_DIR)
+
+    # use deployments package to dump all deployments in all namespaces
+    # save them in results/<namespace name>/deployments
+    print("exporting deployments in all namespaces")
+    deployments.get_deployments(all_ns, RESULTS_DIR)
 
 
 if __name__ == "__main__":
