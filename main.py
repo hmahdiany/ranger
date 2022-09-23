@@ -5,6 +5,7 @@ from v1 import configmaps
 from v1 import secrets
 from v1 import services
 from apps_v1 import deployments
+from batch_v1 import cronjobs
 from networking_k8s_io_v1 import ingresses
 
 def main():
@@ -48,6 +49,11 @@ def main():
     # save them in results/<namespace name>/ingresses
     print("dumping ingresses in all namespaces")
     ingresses.get_ingresses(all_ns, RESULTS_DIR)
+
+    # use cronjobs module to dump all cronjobs in all namespaces
+    # save them in results/<namespace name>/cronjobs
+    print("dumping cronjobs in all namespaces")
+    cronjobs.get_cronjobs(all_ns, RESULTS_DIR)
 
 
 if __name__ == "__main__":
