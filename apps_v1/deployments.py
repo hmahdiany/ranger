@@ -24,7 +24,7 @@ def get_deployments(all_namespaces, result_dir):
         if os.path.exists(BASE_DIR/RESULTS_DIR/ns/DEPLOY_DIR):
             print(DEPLOY_DIR, 'directory already exists')
         else:
-            print('creating', ns, 'directory')
+            print('creating', DEPLOY_DIR, 'directory for', ns, 'namespace')
             os.mkdir(BASE_DIR/RESULTS_DIR/ns/DEPLOY_DIR)
 
         # create an empty list to list all deployments in a namespace
@@ -44,7 +44,7 @@ def get_deployments(all_namespaces, result_dir):
             if i != '':
                 all_deployments.append(i)
 
-        # iterate through all_confimaps list to dump all confimaps in a namespace
+        # iterate through all_deployments list to dump all deployments in a namespace
         for deployment in all_deployments:
 
             # execute command line to get user's namespaces in json format

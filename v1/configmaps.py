@@ -24,7 +24,7 @@ def get_configmaps(all_namespaces, result_dir):
         if os.path.exists(BASE_DIR/RESULTS_DIR/ns/CM_DIR):
             print(CM_DIR, 'directory already exists')
         else:
-            print('creating', ns, 'directory')
+            print('creating', CM_DIR, 'directory for', ns, 'namespace')
             os.mkdir(BASE_DIR/RESULTS_DIR/ns/CM_DIR)
 
         # create an empty list to list all configmaps in a namespace

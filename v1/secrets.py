@@ -24,7 +24,7 @@ def get_secrets(all_namespaces, result_dir):
         if os.path.exists(BASE_DIR/RESULTS_DIR/ns/SECRETS_DIR):
             print(SECRETS_DIR, 'directory already exists')
         else:
-            print('creating', ns, 'directory')
+            print('creating', SECRETS_DIR, 'directory for', ns, 'namespace')
             os.mkdir(BASE_DIR/RESULTS_DIR/ns/SECRETS_DIR)
 
         # create an empty list to list all secrets in a namespace
@@ -44,7 +44,7 @@ def get_secrets(all_namespaces, result_dir):
             if i != '':
                 all_secrets.append(i)
 
-        # iterate through all_confimaps list to dump all confimaps in a namespace
+        # iterate through all_secrets list to dump all secrets in a namespace
         for secret in all_secrets:
 
             # execute command line to get user's namespaces in json format
