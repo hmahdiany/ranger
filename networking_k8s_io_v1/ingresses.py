@@ -1,4 +1,3 @@
-from v1 import namespaces as getns
 from pathlib import Path
 import os
 import subprocess
@@ -9,7 +8,6 @@ from yaml.loader import SafeLoader
 def get_ingresses(all_namespaces, result_dir):
     """
     this function dumps all ingresses in user's namespaces
-    it uses namespaces module from v1 package
     """
 
     # set base directory and create namespaces directory
@@ -63,11 +61,3 @@ def get_ingresses(all_namespaces, result_dir):
                     yaml.dump(json_obj, f)
             except:
                 print(error)
-
-if __name__ == "__main__":
-
-    # define result directory
-    RESULTS_DIR = "results"
-
-    all_ns = getns.get_user_namespaces()
-    get_ingresses(all_ns, RESULTS_DIR)

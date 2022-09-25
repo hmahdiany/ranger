@@ -11,7 +11,7 @@ from networking_k8s_io_v1 import ingresses
 def main():
     # set base directory and create results directory
     BASE_DIR = Path(__file__).resolve().parent
-    RESULTS_DIR = 'results'
+    RESULTS_DIR = 'dump'
 
     if os.path.exists(BASE_DIR/RESULTS_DIR):
         print(RESULTS_DIR, 'directory already exists')

@@ -1,4 +1,3 @@
-from . import namespaces as getns
 from pathlib import Path
 import os
 import subprocess
@@ -9,7 +8,6 @@ from yaml.loader import SafeLoader
 def get_configmaps(all_namespaces, result_dir):
     """
     this function dumps all configmaps in user's namespaces
-    it uses namespaces module from v1 package
     """
 
     # set base directory and create namespaces directory
@@ -55,6 +53,8 @@ def get_configmaps(all_namespaces, result_dir):
             try:
                 json_obj = json.loads(output.decode('ascii'))
                 cm_name = json_obj['metadata']['name'] + '.yaml'
+                if cm_name == "kube-root-ca.crt.yaml":
+                    continue
                 del json_obj['metadata']['resourceVersion']
                 del json_obj['metadata']['creationTimestamp']
                 del json_obj['metadata']['uid']
@@ -62,11 +62,3 @@ def get_configmaps(all_namespaces, result_dir):
                     yaml.dump(json_obj, f)
             except:
                 print(error)
-
-if __name__ == "__main__":
-
-    # define result directory
-    RESULTS_DIR = "results"
-
-    all_ns = getns.get_user_namespaces()
-    get_configmaps(all_ns, RESULTS_DIR)
