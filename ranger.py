@@ -42,58 +42,83 @@ def main():
         print("dumping all namespaces in cluster")
         all_ns = namespaces.get_user_namespaces()
         namespaces.create_namespace_yaml_file(all_ns, RESULTS_DIR)
+    
+    # dump only user specified namespaces
     else:
         print("dumping", input_ns, "namespaces")
         namespaces.create_namespace_yaml_file(input_ns, RESULTS_DIR)
 
     # use configmaps module to dump all configmaps in all namespaces
     # save them in results/<namespace name>/configmaps
-    if input_ns == None:
+    if input_ns == None and input_kind == None:
         print("dumping configmaps in all namespaces")
         configmaps.get_configmaps(all_ns, RESULTS_DIR)
-    else:
-        print("dumping configmaps in ", input_ns, "namespaces")
-        configmaps.get_configmaps(input_ns, RESULTS_DIR)
+
+    # dump configmaps in user specified namespaces
+    elif input_ns != None:
+        if 'configmaps' in input_kind:
+            print("dumping configmaps in ", input_ns, "namespaces")
+            configmaps.get_configmaps(input_ns, RESULTS_DIR)
     
     # use secrets module to dump all secrets in all namespaces
     # save them in results/<namespace name>/secrets
-    if input_ns == None:
+    if input_ns == None and input_kind == None:
         print("dumping secrets in all namespaces")
         secrets.get_secrets(all_ns, RESULTS_DIR)
-    else:
-        secrets.get_secrets(input_ns, RESULTS_DIR)
+
+    # dump secrets in user specified namespaces
+    elif input_ns != None:
+        if 'secrets' in input_kind:
+            print("dumping secrets in ", input_ns, "namespaces")
+            secrets.get_secrets(input_ns, RESULTS_DIR)
 
     # use deployments module to dump all deployments in all namespaces
     # save them in results/<namespace name>/deployments
-    if input_ns == None:
+    if input_ns == None and input_kind == None:
         print("dumping deployments in all namespaces")
         deployments.get_deployments(all_ns, RESULTS_DIR)
-    else:
-        deployments.get_deployments(input_ns, RESULTS_DIR)
+
+    # dump deployments in user specified namespaces
+    elif input_ns != None:
+        if 'deployments' in input_kind:
+            print("dumping deployments in ", input_ns, "namespaces")
+            deployments.get_deployments(input_ns, RESULTS_DIR)
 
     # use services module to dump all services in all namespaces
     # save them in results/<namespace name>/services
-    if input_ns == None:
+    if input_ns == None and input_kind == None:
         print("dumping services in all namespaces")
         services.get_services(all_ns, RESULTS_DIR)
-    else:
-        services.get_services(input_ns, RESULTS_DIR)
+
+    # dump services in user specified namespaces
+    elif input_ns != None:
+        if 'services' in input_kind:
+            print("dumping services in ", input_ns, "namespaces")
+            services.get_services(input_ns, RESULTS_DIR)
 
     # use ingresses module to dump all ingresses in all namespaces
     # save them in results/<namespace name>/ingresses
-    if input_ns == None:
+    if input_ns == None and input_kind == None:
         print("dumping ingresses in all namespaces")
         ingresses.get_ingresses(all_ns, RESULTS_DIR)
-    else:
-        ingresses.get_ingresses(input_ns, RESULTS_DIR)
+
+    # dump ingresses in user specified namespaces
+    elif input_ns != None:
+        if 'ingresses' in input_kind:
+            print("dumping ingresses in ", input_ns, "namespaces")
+            ingresses.get_ingresses(input_ns, RESULTS_DIR)
 
     # use cronjobs module to dump all cronjobs in all namespaces
     # save them in results/<namespace name>/cronjobs
-    if input_ns == None:
+    if input_ns == None and input_kind == None:
         print("dumping cronjobs in all namespaces")
         cronjobs.get_cronjobs(all_ns, RESULTS_DIR)
-    else:
-        cronjobs.get_cronjobs(input_ns, RESULTS_DIR)
+
+    # dump cronjobs in user specified namespaces
+    elif input_ns != None:
+        if 'cronjobs' in input_kind:
+            print("dumping cronjobs in ", input_ns, "namespaces")
+            cronjobs.get_cronjobs(input_ns, RESULTS_DIR)
 
 
 if __name__ == "__main__":
