@@ -9,15 +9,27 @@ from apps_v1 import deployments
 from batch_v1 import cronjobs
 from networking_k8s_io_v1 import ingresses
 
+def dump_namespace(result_dir, input_ns = None):
+    """
+    this function creates a dump for all namespaces which are in input list
+    """
+
+    if input_ns is None:
+        print("dumping all namespaces in cluster")
+        all_ns = namespaces.get_user_namespaces()
+        namespaces.create_namespace_yaml_file(all_ns, result_dir)
+        return all_ns
+    else:
+        print("dumping", input_ns, "namespaces")
+        namespaces.create_namespace_yaml_file(input_ns, result_dir)
+
 def cluster_wide_dump(result_dir):
     """
     this function dumps all kinds in all user defined namespaces
     it us used when no input arguments are spcecified by client
     """
 
-    print("dumping all namespaces in cluster")
-    all_ns = namespaces.get_user_namespaces()
-    namespaces.create_namespace_yaml_file(all_ns, result_dir)
+    all_ns = dump_namespace(result_dir)
 
     print("dumping configmaps in all namespaces")
     configmaps.get_configmaps(all_ns, result_dir)
@@ -43,9 +55,7 @@ def partial_kind_dump(input_kind, result_dir):
     in all namespaces
     """
 
-    print("dumping all namespaces in cluster")
-    all_ns = namespaces.get_user_namespaces()
-    namespaces.create_namespace_yaml_file(all_ns, result_dir)
+    all_ns = dump_namespace(result_dir)
 
     for kind in input_kind:
         if kind == 'configmaps':
@@ -81,8 +91,7 @@ def namespace_wide_dump(input_ns, result_dir):
     as input argument
     """
     
-    print("dumping", input_ns, "namespaces")
-    namespaces.create_namespace_yaml_file(input_ns, result_dir)
+    dump_namespace(result_dir, input_ns)
 
     print("dumping configmaps in ", input_ns, "namespaces")
     configmaps.get_configmaps(input_ns, result_dir)
@@ -107,9 +116,8 @@ def partial_namespace_dump(input_ns, input_kind, result_dir):
     this function dumps some kinds in some namespaces
     """
     
-    print("dumping", input_ns, "namespaces")
-    namespaces.create_namespace_yaml_file(input_ns, result_dir)
-    
+    dump_namespace(result_dir, input_ns)
+
     for kind in input_kind:
         if kind == 'configmaps':
             print("dumping configmaps in all namespaces")
@@ -175,91 +183,6 @@ def main():
 
     else:
         partial_namespace_dump(input_ns, input_kind, RESULTS_DIR)
-
-    ## use namespaces module to get all user's namespaces 
-    ## and create yaml file for them
-    #if input_ns == None:
-    #    print("dumping all namespaces in cluster")
-    #    all_ns = namespaces.get_user_namespaces()
-    #    namespaces.create_namespace_yaml_file(all_ns, RESULTS_DIR)
-    #
-    ## dump only user specified namespaces
-    #else:
-    #    print("dumping", input_ns, "namespaces")
-    #    namespaces.create_namespace_yaml_file(input_ns, RESULTS_DIR)
-#
-    ## use configmaps module to dump all configmaps in all namespaces
-    ## save them in results/<namespace name>/configmaps
-    #if input_ns == None and input_kind == None:
-    #    print("dumping configmaps in all namespaces")
-    #    configmaps.get_configmaps(all_ns, RESULTS_DIR)
-#
-    ## dump configmaps in user specified namespaces
-    #elif input_ns != None:
-    #    if 'configmaps' in input_kind:
-    #        print("dumping configmaps in ", input_ns, "namespaces")
-    #        configmaps.get_configmaps(input_ns, RESULTS_DIR)
-    #
-    ## use secrets module to dump all secrets in all namespaces
-    ## save them in results/<namespace name>/secrets
-    #if input_ns == None and input_kind == None:
-    #    print("dumping secrets in all namespaces")
-    #    secrets.get_secrets(all_ns, RESULTS_DIR)
-#
-    ## dump secrets in user specified namespaces
-    #elif input_ns != None:
-    #    if 'secrets' in input_kind:
-    #        print("dumping secrets in ", input_ns, "namespaces")
-    #        secrets.get_secrets(input_ns, RESULTS_DIR)
-#
-    ## use deployments module to dump all deployments in all namespaces
-    ## save them in results/<namespace name>/deployments
-    #if input_ns == None and input_kind == None:
-    #    print("dumping deployments in all namespaces")
-    #    deployments.get_deployments(all_ns, RESULTS_DIR)
-#
-    ## dump deployments in user specified namespaces
-    #elif input_ns != None:
-    #    if 'deployments' in input_kind:
-    #        print("dumping deployments in ", input_ns, "namespaces")
-    #        deployments.get_deployments(input_ns, RESULTS_DIR)
-#
-    ## use services module to dump all services in all namespaces
-    ## save them in results/<namespace name>/services
-    #if input_ns == None and input_kind == None:
-    #    print("dumping services in all namespaces")
-    #    services.get_services(all_ns, RESULTS_DIR)
-#
-    ## dump services in user specified namespaces
-    #elif input_ns != None:
-    #    if 'services' in input_kind:
-    #        print("dumping services in ", input_ns, "namespaces")
-    #        services.get_services(input_ns, RESULTS_DIR)
-#
-    ## use ingresses module to dump all ingresses in all namespaces
-    ## save them in results/<namespace name>/ingresses
-    #if input_ns == None and input_kind == None:
-    #    print("dumping ingresses in all namespaces")
-    #    ingresses.get_ingresses(all_ns, RESULTS_DIR)
-#
-    ## dump ingresses in user specified namespaces
-    #elif input_ns != None:
-    #    if 'ingresses' in input_kind:
-    #        print("dumping ingresses in ", input_ns, "namespaces")
-    #        ingresses.get_ingresses(input_ns, RESULTS_DIR)
-#
-    ## use cronjobs module to dump all cronjobs in all namespaces
-    ## save them in results/<namespace name>/cronjobs
-    #if input_ns == None and input_kind == None:
-    #    print("dumping cronjobs in all namespaces")
-    #    cronjobs.get_cronjobs(all_ns, RESULTS_DIR)
-#
-    ## dump cronjobs in user specified namespaces
-    #elif input_ns != None:
-    #    if 'cronjobs' in input_kind:
-    #        print("dumping cronjobs in ", input_ns, "namespaces")
-    #        cronjobs.get_cronjobs(input_ns, RESULTS_DIR)
-
 
 if __name__ == "__main__":
     main()
