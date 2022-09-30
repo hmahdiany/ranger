@@ -65,8 +65,8 @@ def get_user_namespaces(RESULTS_DIR):
         if i != '':
             all_namespaces.append(i)
 
-    # save dump file for namespaces
-    create_namespace_yaml_file(all_namespaces, RESULTS_DIR)
+    # # save dump file for namespaces
+    # create_namespace_yaml_file(all_namespaces, RESULTS_DIR)
     # return all_namespaces list 
     return all_namespaces
 

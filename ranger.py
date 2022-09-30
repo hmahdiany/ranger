@@ -5,6 +5,8 @@ from api_resources import api_resources
 from dump_builder import namespaces as ns
 from dump_builder import cluster_wide_dump as cwd
 from dump_builder import partial_kind_dump as pkd
+from dump_builder import namespace_wide_dump as nwd
+from dump_builder import partial_namespace_dump as pnd
 
 def main():
     # parse input arguments
@@ -48,6 +50,7 @@ def main():
         # create a cluster dump if no input argument is passed through command line
         if input_ns == None: 
             ns_list = ns.get_user_namespaces(RESULTS_DIR)
+            ns.create_namespace_yaml_file(ns_list, RESULTS_DIR)
             namespaced_api = api_resources.namespaced_resources()
 
             if input_kind == None:
@@ -58,7 +61,29 @@ def main():
                 for kind in input_kind:
                     if kind not in namespaced_api:
                         print(kind, "is not a namespaced api")
+                        input_kind.remove(kind)
+                    
                 pkd.partial_kind_dump(ns_list, input_kind, RESULTS_DIR)
+
+        elif input_ns != None:
+            ns_list = ns.get_user_namespaces(RESULTS_DIR)
+            for namespace in input_ns:
+                if namespace not in ns_list:
+                    print(namespace, "namespace does not exists")
+                    input_ns.remove(namespace)
+            ns.create_namespace_yaml_file(input_ns, RESULTS_DIR)
+
+            namespaced_api = api_resources.namespaced_resources()
+
+            if input_kind == None:
+                nwd.namespace_wide_dump(input_ns, namespaced_api, RESULTS_DIR)
+
+            elif input_kind != None:
+                for kind in input_kind:
+                    if kind not in namespaced_api:
+                        print(kind, "is not a namespaced api")
+                        input_kind.remove(kind)
+                pnd.partial_namespace_dump(input_ns, input_kind, RESULTS_DIR)
     
 
 if __name__ == "__main__":
