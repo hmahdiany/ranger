@@ -4,18 +4,9 @@ from pathlib import Path
 from api_resources import api_resources
 from dump_builder import namespaces as ns
 from dump_builder import cluster_wide_dump as cwd
+from dump_builder import partial_kind_dump as pkd
 
 def main():
-    # set base directory and create results directory
-    BASE_DIR = Path(__file__).resolve().parent
-    RESULTS_DIR = 'dump'
-
-    if os.path.exists(BASE_DIR/RESULTS_DIR):
-        print(RESULTS_DIR, 'directory already exists')
-    else:
-        print('creating', RESULTS_DIR, 'directory')
-        os.mkdir(BASE_DIR/RESULTS_DIR)
-
     # parse input arguments
     # valid arguments are --namespace followed by a list of namespaces. if not specified all namespaces will be considered.
     # and --kind followed by a list of Kubernetes kind to dump. if not specified all kinds will be dumped
@@ -38,15 +29,37 @@ def main():
 
     # print all api resources in cluster
     if list_api_arg:
-        api_list = api_resources.api_resources()
+        api_list = [*set(api_resources.api_resources())] # *set removes duplicate values in a list
         for i in range(len(api_list)):
             print(api_list[i])
+    else:
+        # set base directory and create results directory
+        BASE_DIR = Path(__file__).resolve().parent
+        RESULTS_DIR = 'dump'
+
+        if os.path.exists(BASE_DIR/RESULTS_DIR):
+            print(RESULTS_DIR, 'directory already exists')
+        else:
+            print('creating', RESULTS_DIR, 'directory')
+            os.mkdir(BASE_DIR/RESULTS_DIR)
     
-    # make a decision bases on command line arguments
-    if input_ns == None and input_kind == None:
-        ns_list = ns.get_user_namespaces(RESULTS_DIR)
-        namespaced_api = api_resources.namespaced_resources()
-        cwd.cluster_wide_dump(ns_list, namespaced_api,RESULTS_DIR)
+        # make a decision based on command line arguments
+
+        # create a cluster dump if no input argument is passed through command line
+        if input_ns == None: 
+            ns_list = ns.get_user_namespaces(RESULTS_DIR)
+            namespaced_api = api_resources.namespaced_resources()
+
+            if input_kind == None:
+                cwd.cluster_wide_dump(ns_list, namespaced_api, RESULTS_DIR)
+
+            # create a dump for specific kinds which are passed through --kind command line object
+            elif input_kind != None:
+                for kind in input_kind:
+                    if kind not in namespaced_api:
+                        print(kind, "is not a namespaced api")
+                pkd.partial_kind_dump(ns_list, input_kind, RESULTS_DIR)
+    
 
 if __name__ == "__main__":
     main()

@@ -47,9 +47,6 @@ def cluster_wide_dump(ns_list, kind_list, result_dir):
 
             # create dump
             for obj in object_list:
-                # skip dump for event object
-                if obj == "events":
-                    continue
                 
                 kind_cmd = "kubectl get " + kind + " -o json -n " + ns + " " + obj
                 get_kind = subprocess.Popen(kind_cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
