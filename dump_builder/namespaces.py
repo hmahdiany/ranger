@@ -40,7 +40,7 @@ def create_namespace_yaml_file(all_namespaces, result_dir):
         except:
             print(error)
 
-def get_user_namespaces():
+def get_user_namespaces(RESULTS_DIR):
     """
     this function creates a list of all namesapces
     in a kubernetes cluster except those that start
@@ -66,7 +66,7 @@ def get_user_namespaces():
             all_namespaces.append(i)
 
     # save dump file for namespaces
-    create_namespace_yaml_file(all_namespaces, RESE)
+    create_namespace_yaml_file(all_namespaces, RESULTS_DIR)
     # return all_namespaces list 
     return all_namespaces
 

@@ -44,8 +44,9 @@ def main():
     
     # make a decision bases on command line arguments
     if input_ns == None and input_kind == None:
-        ns_list = ns.get_user_namespaces()
-        cwd.cluster_wide_dump(ns_list, RESULTS_DIR)
+        ns_list = ns.get_user_namespaces(RESULTS_DIR)
+        namespaced_api = api_resources.namespaced_resources()
+        cwd.cluster_wide_dump(ns_list, namespaced_api,RESULTS_DIR)
 
 if __name__ == "__main__":
     main()
