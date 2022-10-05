@@ -31,9 +31,16 @@ def main():
 
     # print all api resources in cluster
     if list_api_arg:
-        api_list = [*set(api_resources.api_resources())] # *set removes duplicate values in a list
-        for i in range(len(api_list)):
-            print(api_list[i])
+        cluster_wide_api_list = [*set(api_resources.cluster_wide_resources())] # *set removes duplicate values in a list
+        print("*****Cluster wide api resources*****")
+        for i in range(len(cluster_wide_api_list)):
+            print(cluster_wide_api_list[i])
+        print("-" * 20)
+
+        namespaced_wide_api_list = [*set(api_resources.namespaced_resources())] # *set removes duplicate values in a list
+        print("*****Namespaced wide api resources*****")
+        for i in range(len(namespaced_wide_api_list)):
+            print(namespaced_wide_api_list[i])
     else:
         # set base directory and create results directory
         BASE_DIR = Path(__file__).resolve().parent
