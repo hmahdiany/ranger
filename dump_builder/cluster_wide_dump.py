@@ -19,16 +19,11 @@ def cluster_wide_dump(ns_list, kind_list, result_dir):
             
             TARGET_DIR = kind
 
-            # skip dump for event object
-            if kind == "events" or kind == "endpoints" or kind == "endpointslices":
+            # skip dump for some resources
+            skip_dump = ["events", "endpoints", "endpointslices", "controllerrevisions"]
+            if kind in skip_dump:
                 continue
-
-            # create directory for each kind
-            if os.path.exists(BASE_DIR/RESULTS_DIR/ns/TARGET_DIR):
-                pass
-            else:
-                os.mkdir(BASE_DIR/RESULTS_DIR/ns/TARGET_DIR)
-
+            
             # create an empty list for all objects in namespace
             object_list = []
 
@@ -45,28 +40,37 @@ def cluster_wide_dump(ns_list, kind_list, result_dir):
                 if i != '':
                     object_list.append(i)
 
-            # create dump
-            for obj in object_list:
-                
-                kind_cmd = "kubectl get " + kind + " -o json -n " + ns + " " + obj
-                get_kind = subprocess.Popen(kind_cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
-                output, error = get_kind.communicate()
-                try:
-                    json_obj = json.loads(output.decode('ascii'))
-                    obj_name = json_obj['metadata']['name'] + '.yaml'
-                    if obj_name == "kube-root-ca.crt.yaml" or obj_name == "kubernetes.yaml":
-                        continue
-                    del json_obj['metadata']['resourceVersion']
-                    del json_obj['metadata']['creationTimestamp']
-                    del json_obj['metadata']['uid']
-                    if 'spec' in json_obj:
-                        if 'clusterIP' in json_obj['spec']:
-                            del json_obj['spec']['clusterIP']
-                        if 'clusterIPs' in json_obj['spec']:
-                            del json_obj['spec']['clusterIPs']
-                    if 'status' in json_obj:
-                        del json_obj['status']
-                    with open(os.path.join(BASE_DIR/RESULTS_DIR/ns/TARGET_DIR, obj_name), 'w') as f:
-                        yaml.dump(json_obj, f)
-                except:
-                    print("error: couldn't write dump file for ", obj, "of kind", kind, "in", ns, "namespace")
+            # check if object_list is empty or not
+            if object_list == []:
+                continue
+            else:
+                # create directory for each kind
+                if os.path.exists(BASE_DIR/RESULTS_DIR/ns/TARGET_DIR):
+                    pass
+                else:
+                    os.mkdir(BASE_DIR/RESULTS_DIR/ns/TARGET_DIR)
+                # create dump
+                for obj in object_list:
+
+                    kind_cmd = "kubectl get " + kind + " -o json -n " + ns + " " + obj
+                    get_kind = subprocess.Popen(kind_cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
+                    output, error = get_kind.communicate()
+                    try:
+                        json_obj = json.loads(output.decode('ascii'))
+                        obj_name = json_obj['metadata']['name'] + '.yaml'
+                        if obj_name == "kube-root-ca.crt.yaml" or obj_name == "kubernetes.yaml":
+                            continue
+                        del json_obj['metadata']['resourceVersion']
+                        del json_obj['metadata']['creationTimestamp']
+                        del json_obj['metadata']['uid']
+                        if 'spec' in json_obj:
+                            if 'clusterIP' in json_obj['spec']:
+                                del json_obj['spec']['clusterIP']
+                            if 'clusterIPs' in json_obj['spec']:
+                                del json_obj['spec']['clusterIPs']
+                        if 'status' in json_obj:
+                            del json_obj['status']
+                        with open(os.path.join(BASE_DIR/RESULTS_DIR/ns/TARGET_DIR, obj_name), 'w') as f:
+                            yaml.dump(json_obj, f)
+                    except:
+                        print("error: couldn't write dump file for ", obj, "of kind", kind, "in", ns, "namespace")
