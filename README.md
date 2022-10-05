@@ -14,13 +14,13 @@ Ranger supports some options to create dump files based on user input arguments.
 
 ## Examples
 - dump all kinds in all user defined namespaces:
-  - python3 ranger.py
+  - `python3 ranger.py`
 
-- dump all kinds in `gitlab` and `ingress-nginx` namespaces:
-  - python3 ranger.py --namespace gitlab ingress-nginx
+- dump all kinds in ___gitlab___ and ___ingress-nginx___ namespaces:
+  - `python3 ranger.py --namespace gitlab ingress-nginx`
 
-- dump only `services` and `configmaps` in all user defined namespaces:
-  - python3 ranger.py --kind services configmaps
+- dump only ___services___ and ___configmaps___ in all user defined namespaces:
+  - `python3 ranger.py --kind services configmaps`
 
-- dump `deployments` and `secrets` in `gitlab` namespace
-  - python3 ranger.py --namespace gitlab --kind deployments secrets
+- dump ___deployments___ and ___secrets___ in ___gitlab___ namespace
+  - `python3 ranger.py --namespace gitlab --kind deployments secrets`
