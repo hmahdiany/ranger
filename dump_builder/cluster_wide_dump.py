@@ -28,6 +28,7 @@ def cluster_wide_dump(ns_list, kind_list, result_dir):
             object_list = []
 
             # execute command line to append all objects to object_list
+            print("***getting all", kind, "objects in", ns, "namespace")
             obj_cmd = "kubectl get " + kind + " -n " + ns + "| grep -v 'NAME' | awk '{print $1}'"
             obj_list = subprocess.Popen(obj_cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
             output, error = obj_list.communicate()
