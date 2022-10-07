@@ -57,6 +57,9 @@ def partial_kind_dump(ns_list, kind_list, result_dir):
                     del json_obj['metadata']['resourceVersion']
                     del json_obj['metadata']['creationTimestamp']
                     del json_obj['metadata']['uid']
+                    if 'annotations' in json_obj['metadata']:
+                            if 'kubectl.kubernetes.io/last-applied-configuration' in json_obj['metadata']['annotations']:
+                                del json_obj['metadata']['annotations']['kubectl.kubernetes.io/last-applied-configuration']
                     if 'spec' in json_obj:
                         if 'clusterIP' in json_obj['spec']:
                             del json_obj['spec']['clusterIP']
