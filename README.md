@@ -1,6 +1,6 @@
 # Ranger project
 
-Ranger project makes migration easier from one Kubernetes cluster to another one. It is useful to create a dump from all manifests which has been applied in all user defined namespaces orother cluster wide objects. All dumps will be saved in `dump` directory.
+Ranger project makes migration easier from one Kubernetes cluster to another one. It is useful to create a dump from all manifests which has been applied in all user defined namespaces. All dumps will be saved in `dump` directory.
 
 ## How to use
 Ranger supports some options to create dump files based on user input arguments. Here are available cli options:
