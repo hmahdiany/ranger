@@ -12,7 +12,7 @@ import (
 	v1 "k8s.io/api/core/v1"
 )
 
-func StoreYamlFile(namspaceList *v1.NamespaceList) {
+func (a AllNsList) StoreYamlFile(namspaceList *v1.NamespaceList) {
 
 	// iterate through namespace list
 	for i := 0; i < len(namspaceList.Items); i++ {
@@ -58,4 +58,9 @@ func StoreYamlFile(namspaceList *v1.NamespaceList) {
 		// store dump file
 		os.WriteFile(filepath.Join("dump", namspaceList.Items[i].Name, "ns.yaml"), yamlData, 0644)
 	}
+}
+
+func (a UserInputNsList) StoreYamlFile(annotations map[string]string, name string) {
+	fmt.Println(name)
+	fmt.Println("this is annotation: ", annotations["kubectl.kubernetes.io/last-applied-configuration"])
 }
